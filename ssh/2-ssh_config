@@ -1,3 +1,4 @@
-Host *
-  IdentityFile ~/.ssh/school
-  PasswordAuthentication no
+Host 35.175.182.177
+    IdentityFile ~/alu-system_engineering-devops/ssh
+    PreferredAuthentications publickey
+    PasswordAuthentication no
