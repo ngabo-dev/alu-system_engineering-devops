@@ -1,7 +1,38 @@
 #!/usr/bin/env bash
-#setting up nginx server
+# Setting up nginx server
+
+# Update apt package index
 sudo apt-get -y update
+
+# Install nginx
 sudo apt-get -y install nginx
+
+# Allow HTTP traffic through the firewall
 sudo ufw allow 'Nginx HTTP'
-echo "Holberton School" | sudo tee /var/www/html/index.nginx-debian.html
+
+# Create a custom HTML file with the desired content
+echo "Holberton School" | sudo tee /var/www/html/index.html
+
+# Configure nginx to return a 200 status code along with the custom content
+sudo bash -c 'cat > /etc/nginx/sites-available/default' <<EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+    location = / {
+        return 200 "Holberton School\n";
+    }
+}
+EOF
+
+# Restart nginx to apply the changes
 sudo service nginx restart
