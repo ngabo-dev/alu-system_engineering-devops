@@ -36,3 +36,7 @@ EOF
 
 # Restart nginx to apply the changes
 sudo service nginx restart
+
+# Verify that the server returns a status code of 200 when queried at its root /
+status_code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/)
+echo $status_code
