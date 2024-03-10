@@ -7,11 +7,14 @@ sudo apt-get -y update
 # Install nginx
 sudo apt-get -y install nginx
 
-# Allow HTTP traffic through the firewall
+# Install ufw if not installed (optional)
+sudo apt-get -y install ufw
+
+# Allow HTTP traffic through the firewall (optional)
 sudo ufw allow 'Nginx HTTP'
 
 # Create a custom HTML file with the desired content
-echo "Holberton School" | sudo tee /var/www/html/index.html
+echo "Holberton School" | sudo tee /var/www/html/index.html > /dev/null
 
 # Configure nginx to return a 200 status code along with the custom content
 sudo bash -c 'cat > /etc/nginx/sites-available/default' <<EOF
@@ -36,7 +39,3 @@ EOF
 
 # Restart nginx to apply the changes
 sudo service nginx restart
-
-# Verify that the server returns a status code of 200 when queried at its root /
-status_code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/)
-echo $status_code
