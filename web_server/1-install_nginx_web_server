@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Update package index
+apt-get update
+
+# Install nginx
+apt-get install -y nginx
+
+# Create a temporary index.html file
+echo "<!DOCTYPE html>" > /var/www/html/index.html
+echo "<html>" >> /var/www/html/index.html
+echo "<head><title>Welcome to Holberton School</title></head>" >> /var/www/html/index.html
+echo "<body><h1>Holberton School for the win!</h1></body>" >> /var/www/html/index.html
+echo "</html>" >> /var/www/html/index.html
+
+# Configure Nginx to listen on port 80 and serve the temporary index.html
+echo "server {
+    listen 80;
+    server_name _;
+    root /var/www/html;
+    index index.html;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}" > /etc/nginx/sites-available/default
+
+# Restart Nginx
+service nginx stop
+nginx -g "daemon off;" &
