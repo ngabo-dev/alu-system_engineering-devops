@@ -26,4 +26,3 @@ EOF'
 
 # Restart Nginx to apply changes
 sudo service nginx restart
-
