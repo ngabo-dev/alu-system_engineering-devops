@@ -1,26 +1,32 @@
 #!/usr/bin/env bash
-# configures an Nginx server to have a custom 404 page that contains the string 'Ceci n'est pas une page'
-sudo apt update
+# Install Nginx
+sudo apt update -y
 sudo apt install nginx -y
-sudo touch /var/www/html/index.html
-sudo touch /var/www/html/error404.html
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/error404.html
 
-printf %s "server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
+# Create custom 404 page
+sudo bash -c 'echo "Ceci n'"'"'est pas une page" > /var/www/html/404.html'
 
-        root /var/www/html;
+# Configure Nginx for custom 404 page
+sudo bash -c "cat <<EOF > /etc/nginx/sites-available/default
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-        index index.html;
-        error_page 404 /error404.html;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
 
-        server_name _;
+    server_name _;
 
-        location /redirect_me {
-           return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4/;
+    location / {
+        try_files \$uri \$uri/ =404;
+        error_page 404 /404.html;
+        location = /404.html {
+            internal;
         }
+    }
 }
-" | sudo tee /etc/nginx/sites-available/default
+EOF"
 
+# Restart Nginx to apply changes
 sudo service nginx restart
+
