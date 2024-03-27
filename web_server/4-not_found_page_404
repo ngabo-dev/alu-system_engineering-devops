@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # Install Nginx
-
 sudo apt update -y
 sudo apt install nginx -y
 
@@ -30,4 +29,3 @@ EOF"
 
 # Restart Nginx to apply changes
 sudo service nginx restart
-
